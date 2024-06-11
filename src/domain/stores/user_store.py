@@ -4,7 +4,7 @@ from abc import abstractmethod, ABC
 
 class UserStore(ABC):
     @abstractmethod
-    async def get_by_name(self, name: str) -> User:
+    async def get_by_login(self, login: str) -> User:
         pass
 
     @abstractmethod
@@ -16,5 +16,5 @@ class UserStore(ABC):
         pass
 
     @abstractmethod
-    async def delete_by_name(self, name: str):
+    async def delete_by_login(self, login: str):
         pass

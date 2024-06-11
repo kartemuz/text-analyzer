@@ -5,7 +5,7 @@ from ..domain.models import User
 class UserRepository(UserStore):
     model = None
 
-    async def get_by_name(self, name: str) -> User:
+    async def get_by_login(self, name: str) -> User:
         pass
 
     async def edit(self, obj: User):
@@ -14,5 +14,5 @@ class UserRepository(UserStore):
     async def add(self, obj: User):
         pass
 
-    async def delete_by_name(self, name: str):
+    async def delete_by_login(self, name: str):
         pass

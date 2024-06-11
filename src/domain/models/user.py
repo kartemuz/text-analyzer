@@ -2,5 +2,6 @@ from typing import List
 
 
 class User:
-    name: str
+    login: str
+    password: str
     tags: List[str]
