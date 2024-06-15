@@ -1,5 +1,6 @@
 from ..models import NewsSource
 from abc import abstractmethod, ABC
+from typing import List
 
 
 class NewsSourceStore(ABC):
@@ -8,13 +9,17 @@ class NewsSourceStore(ABC):
         pass
 
     @abstractmethod
-    async def edit(self, obj: NewsSource):
+    async def edit(self, news_source: NewsSource) -> bool:
         pass
 
     @abstractmethod
-    async def add(self, obj: NewsSource):
+    async def add(self, news_source: NewsSource) -> None:
         pass
 
     @abstractmethod
-    async def delete_by_name(self, name: str):
+    async def delete(self, name: str) -> bool:
+        pass
+
+    @abstractmethod
+    async def get_all(self) -> List[NewsSource]:
         pass
