@@ -1,11 +1,10 @@
-from src.domain.stores import UserStore
+from src.domain.stores import UserStore, exc_store
 from src.domain.models import User
 from ..database.models import UserDB, TagDB, UserTagDB
 from ..database.base import session_factory
 from sqlalchemy import select, and_, exc
 from sqlalchemy.orm import selectinload
 from typing import List, Optional
-from src.domain.stores import exc_store
 
 
 class UserRepository(UserStore):
@@ -55,9 +54,9 @@ class UserRepository(UserStore):
         result: bool
         user_db = await self.get_user_db_(user.login, user.password)
         if user_db is not None:
-            result = True
             await self.delete(user.login, user.password)
             await self.add(user)
+            result = True
         else:
             result = False
         return result
@@ -90,7 +89,8 @@ class UserRepository(UserStore):
                 session.add(user_tag_db)
                 await session.commit()
 
-    async def delete(self, login: Optional[str], password: Optional[str], user: Optional[User]) -> bool:
+    async def delete(self, login: Optional[str], password: Optional[str],
+                     user: Optional[User]) -> bool:
         result: bool
         user_db: UserDB
         if user is None:

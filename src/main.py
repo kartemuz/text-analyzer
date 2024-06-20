@@ -1,9 +1,5 @@
-import asyncio
-
-
-async def main():
-    pass
-
+from presentation import main
+import flet as ft
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    ft.app(target=main)

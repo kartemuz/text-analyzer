@@ -1,11 +1,11 @@
 from ..models import NewsSource
 from abc import abstractmethod, ABC
-from typing import List
+from typing import List, Optional
 
 
 class NewsSourceStore(ABC):
     @abstractmethod
-    async def get_by_name(self, name: str) -> NewsSource:
+    async def get(self, name: str) -> Optional[NewsSource]:
         pass
 
     @abstractmethod
@@ -17,7 +17,7 @@ class NewsSourceStore(ABC):
         pass
 
     @abstractmethod
-    async def delete(self, name: str) -> bool:
+    async def delete(self, name: Optional[str], news_source: Optional[NewsSource]) -> bool:
         pass
 
     @abstractmethod

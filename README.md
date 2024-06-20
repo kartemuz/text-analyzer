@@ -30,16 +30,16 @@ venv\Scripts\activate.bat
 pip install -r requirements.txt
 ```
 
-## Запуск кода
+## Запуск приложения
 
 **Linux**:
 
 ```commandline
-python src/main.py
+flet run --web src/main.py
 ```
 
 **Windows**:
 
 ```commandline
-python src\main.py
+flet run --web src/main.py
 ```

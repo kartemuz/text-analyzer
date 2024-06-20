@@ -7,9 +7,11 @@ from rss_parser.models import XMLBaseModel
 
 class NewsSource(Source):
     rss: XMLBaseModel
+    rss_url: str
 
-    def __init__(self, *args):
-        super().__init__(*args)
+    def __init__(self, name: str, rss_url: str):
+        super().__init__(name=name)
+        self.rss_url = rss_url
         self.upload_rss_()
 
     async def upload_rss_(self):
