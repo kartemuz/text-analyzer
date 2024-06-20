@@ -1,5 +1,8 @@
 # модуль графического интерфейса
 import flet as ft
+from flet_core import margin
+
+
 
 
 def main(page: ft.Page):
@@ -10,7 +13,7 @@ def main(page: ft.Page):
     def login_view():
         login_input = ft.TextField(label="Логин", width=300)
         password_input = ft.TextField(label="Пароль", password=True, width=300)
-        register_link = ft.TextButton("Зарегистрироваться", on_click=lambda _: switch_to_register_view())
+        register_link = ft.TextButton("Зарегистрироваться", on_click=lambda _: switch_to_register())
         login_button = ft.ElevatedButton(
             content=ft.Text("Войти", size=20, color=ft.colors.WHITE),
             bgcolor=ft.colors.BLUE,
@@ -42,7 +45,7 @@ def main(page: ft.Page):
         login_input = ft.TextField(label="Логин", width=300, border_color="red")
         password_input = ft.TextField(label="Пароль", password=True, width=300, border_color="red")
         error_text = ft.Text("Неверный логин или пароль", size=18, weight=ft.FontWeight.NORMAL, color="red")
-        register_link = ft.TextButton("Зарегистрироваться", on_click=lambda _: switch_to_register_view())
+        register_link = ft.TextButton("Зарегистрироваться", on_click=lambda _: switch_to_register())
         login_button = ft.ElevatedButton(
             content=ft.Text("Войти", size=20, color=ft.colors.WHITE),
             bgcolor=ft.colors.BLUE,
@@ -104,7 +107,7 @@ def main(page: ft.Page):
 
     def register_view_error_login():
         error_text = ft.Text("Логин может содержать только строчные\nбуквы латинского алфавита и цифры.",
-                             size=18, weight=ft.FontWeight.NORMAL, color="red")
+                             size=18, weight=ft.FontWeight.NORMAL, color="red", text_align=ft.alignment.center)
         username_input = ft.TextField(label="Логин", width=300, border_color="red")
         password_input = ft.TextField(label="Пароль", password=True, width=300)
         confirm_password_input = ft.TextField(label="Повторите пароль", password=True, width=300)
@@ -138,13 +141,13 @@ def main(page: ft.Page):
     def register_view_error_pass(type):
         if type == 1:
             error_text = ft.Text("Пароль должен содержать не менее 8 символов.",
-                             size=18, weight=ft.FontWeight.NORMAL, color="red")
+                             size=18, weight=ft.FontWeight.NORMAL, color="red", text_align=ft.TextAlign.CENTER)
         elif type == 2:
             error_text = ft.Text("Пароль может содержать только\nбуквы латинского алфавита и цифры.",
-                                 size=18, weight=ft.FontWeight.NORMAL, color="red")
+                                 size=18, weight=ft.FontWeight.NORMAL, color="red", text_align=ft.TextAlign.CENTER)
         else:
             error_text = ft.Text("Введённые значения не совпадают.",
-                                 size=18, weight=ft.FontWeight.NORMAL, color="red")
+                                 size=18, weight=ft.FontWeight.NORMAL, color="red", text_align=ft.TextAlign.CENTER)
         username_input = ft.TextField(label="Логин", width=300)
         password_input = ft.TextField(label="Пароль", password=True, width=300, border_color="red")
         confirm_password_input = ft.TextField(label="Повторите пароль", password=True, width=300, border_color="red")
@@ -162,9 +165,9 @@ def main(page: ft.Page):
                 [
                     ft.Text("Регистрация", size=24, weight=ft.FontWeight.BOLD),
                     username_input,
-                    error_text,
                     password_input,
                     confirm_password_input,
+                    error_text,
                     register_button,
                 ],
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
@@ -175,39 +178,21 @@ def main(page: ft.Page):
             expand=True,
         )
 
-    def mainpage_view(username):
-        banner = ft.Banner(
-            bgcolor=ft.colors.SECONDARY_CONTAINER,
-            content=ft.Column([
-                ft.TextButton(
-                    content=ft.Text("Настройки", size=20, color=ft.colors.BLUE_ACCENT_700), on_click=None),
-                ft.TextButton(content=ft.Text("Мои темы", size=20, color=ft.colors.BLUE_ACCENT_700), on_click=None),
-            ],
-            ),
-            actions=[ft.TextButton("Закрыть", icon=ft.icons.CANCEL_OUTLINED, icon_color=ft.colors.SECONDARY,
-                                   on_click=lambda _: close_banner())],
-            force_actions_below=True,
-            open=False,
-        )
+    def mainpage_view():
+        settings = ft.TextButton(content=ft.Text("Настройки", size=20, color=ft.colors.BLUE_ACCENT_700), on_click=None)
+        themes = ft.TextButton(content=ft.Text("Мои темы", size=20, color=ft.colors.BLUE_ACCENT_700), on_click=lambda _:switch_to_mythemes())
 
-        def open_banner():
-            banner.open = True
-            page.update()
-
-        def close_banner():
-            banner.open = False
-            page.update()
-
-        profile = ft.TextButton(username, on_click=lambda _: open_banner())
+        profile = ft.Text("dd", size=22)
         a = ft.Row(
             [
-                ft.Icon(name=ft.icons.SUPERVISED_USER_CIRCLE, color=ft.colors.BLUE_ACCENT_700),
+                ft.Icon(name=ft.icons.SUPERVISED_USER_CIRCLE, color=ft.colors.BLUE_ACCENT_700, size=30),
                 profile,
-                banner,
+                settings,
+                themes,
             ],
-            alignment=ft.MainAxisAlignment.END,
+            alignment=ft.MainAxisAlignment.START,
             vertical_alignment=ft.CrossAxisAlignment.START,
-            spacing=10,
+            spacing=5,
         )
         feed_button = ft.ElevatedButton(
             width=200,
@@ -228,6 +213,7 @@ def main(page: ft.Page):
             ),
         )
         page.add(a)
+        page.update()
         return ft.Container(
             content=ft.Row(
                 [
@@ -241,41 +227,84 @@ def main(page: ft.Page):
             expand=True,
         )
 
+    def mythemes_view():
+        topics = [
+            {"name": "Котики", "date": "17.02.2024"},
+            {"name": "Инвестиции", "date": "22.02.2024"}
+        ]
+        b = ft.TextButton(content=ft.Row(
+                [
+                    ft.Icon(name=ft.icons.ARROW_BACK_ROUNDED, color=ft.colors.SECONDARY),
+                    ft.Text("На главную", size=20, color=ft.colors.SECONDARY),
+                ],
+                vertical_alignment=ft.CrossAxisAlignment.START,
+            ),
+            width=200,
+            on_click=lambda _: switch_to_mainpage(),
 
-    # Function to switch to the Register View
-    def switch_to_register_view():
+        )
+        page.add(b)
+        page.update()
+        topics_list = ft.Column(horizontal_alignment=ft.CrossAxisAlignment.START, alignment=ft.MainAxisAlignment.START)
+        for topic in topics:
+            topic_row = ft.Row(
+                controls=[
+                    ft.Text(topic["name"], size=18),
+                    ft.ElevatedButton(content=ft.Text("Удалить", size=18, color=ft.colors.WHITE), bgcolor=ft.colors.BLUE_ACCENT_700, on_click=None, )
+                ],
+                alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                vertical_alignment=ft.alignment.top_center,
+            )
+            topics_list.controls.append(topic_row)
+        return topics_list
+    
+    def settings_view():
+        return None
+
+    def switch_to_register():
         page.controls.clear()
         page.add(register_view())
         page.update()
 
-    def switch_to_register_view_error_login():
+    def switch_to_register_error_login():
         page.controls.clear()
         page.add(register_view_error_login())
         page.update()
 
-    def switch_to_register_view_error_pass(type):
+    def switch_to_register_error_pass(type):
         page.controls.clear()
         page.add(register_view_error_pass(type))
         page.update()
 
     # Function to switch to the Login View
-    def switch_to_login_view():
+    def switch_to_login():
         page.controls.clear()
         page.add(login_view())
         page.update()
 
-    def switch_to_login_view_error():
+    def switch_to_login_error():
         page.controls.clear()
         page.add(login_view_error())
         page.update()
 
-    def switch_to_mainpage_view(username):
+    def switch_to_mainpage():
         page.controls.clear()
-        page.add(mainpage_view(username))
+        page.add(mainpage_view())
         page.update()
 
-    # Initialize the app with the Login View
-    switch_to_login_view()
+    def switch_to_mythemes():
+        page.controls.clear()
+        page.add(mythemes_view())
+        page.update()
+
+    def switch_to_settings():
+        page.controls.clear()
+        page.add(settings_view())
+        page.update()
+        
+        
+    switch_to_mainpage()
 
 
+username = "aboba"
 ft.app(target=main)
