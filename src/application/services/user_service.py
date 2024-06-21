@@ -1,6 +1,7 @@
-from src.domain.stores import UserStore, exc_store
+from src.domain.stores import UserStore
 from src.domain.models import User
 from typing import Optional, List
+from src.application.customizer.default_data import data
 
 
 class UserService:
@@ -23,9 +24,13 @@ class UserService:
         return result
 
     async def delete(self, login: str, password: str) -> bool:
-        result = await self.store.delete(login=login, password=password)
+        result = await self.store.delete(login=login, password=password, user=None)
         return result
 
     async def get_all_logins(self) -> List[str]:
         result = await self.store.get_all_logins()
         return result
+
+    async def create_default(self) -> None:
+        for u in data.users:
+            await self.add(login=u.login, password=u.password, tags=u.tags)

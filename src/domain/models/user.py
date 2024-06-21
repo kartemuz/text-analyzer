@@ -22,3 +22,8 @@ class User:
         else:
             result = False
         return result
+
+    @property
+    def to_str(self) -> str:
+        result = f'login: {self.login}\npassword: {self.password}\ntags:{self.tags}'
+        return result

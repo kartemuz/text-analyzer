@@ -19,7 +19,7 @@ class NewsSourceRepository(NewsSourceStore):
     async def get(self, name: str) -> Optional[NewsSource]:
         result: Optional[NewsSource]
         news_source_db = await self.get_news_source_db_(name)
-        result = NewsSource(name=news_source_db.name, rss_url=news_source_db.rss_url)
+        result = await NewsSource(name=news_source_db.name, rss_url=news_source_db.rss_url).create()
         return result
 
     async def edit(self, news_source: NewsSource) -> bool:
@@ -69,5 +69,5 @@ class NewsSourceRepository(NewsSourceStore):
         async with session_factory() as session:
             query = select(NewsSourceDB)
             query_result = await session.execute(query)
-            result = [NewsSource(name=i.name, rss_url=i.rss_url) for i in query_result.scalars()]
+            result = [await NewsSource(name=i.name, rss_url=i.rss_url).create() for i in query_result.scalars()]
         return result
