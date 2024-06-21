@@ -179,8 +179,8 @@ def main(page: ft.Page):
         )
 
     def mainpage_view():
-        settings = ft.TextButton(content=ft.Text("Настройки", size=20, color=ft.colors.BLUE_ACCENT_700), on_click=None)
-        themes = ft.TextButton(content=ft.Text("Мои темы", size=20, color=ft.colors.BLUE_ACCENT_700), on_click=lambda _:switch_to_mythemes())
+        settings = ft.TextButton(content=ft.Text("Настройки", size=20, color=ft.colors.BLUE_ACCENT_700), on_click=lambda _: switch_to_settings())
+        themes = ft.TextButton(content=ft.Text("Мои темы", size=20, color=ft.colors.BLUE_ACCENT_700), on_click=lambda _: switch_to_mythemes())
 
         profile = ft.Text("dd", size=22)
         a = ft.Row(
@@ -199,6 +199,7 @@ def main(page: ft.Page):
             height=50,
             content=ft.Text("Лента", size=24, color=ft.colors.WHITE),
             bgcolor=ft.colors.ON_PRIMARY_CONTAINER,
+            on_click=lambda _: switch_to_feed(),
             style=ft.ButtonStyle(
                 shape=ft.RoundedRectangleBorder(radius=10),
             ),
@@ -241,10 +242,8 @@ def main(page: ft.Page):
             ),
             width=200,
             on_click=lambda _: switch_to_mainpage(),
-
         )
-        page.add(b)
-        page.update()
+
         topics_list = ft.Column(horizontal_alignment=ft.CrossAxisAlignment.START, alignment=ft.MainAxisAlignment.START)
         for topic in topics:
             topic_row = ft.Row(
@@ -256,10 +255,160 @@ def main(page: ft.Page):
                 vertical_alignment=ft.alignment.top_center,
             )
             topics_list.controls.append(topic_row)
-        return topics_list
-    
+        return ft.Container(content=ft.Column([b, ft.Text("Мои темы", size=24,  weight=ft.FontWeight.BOLD), topics_list,]), alignment=ft.alignment.top_left, expand=True,)
+
     def settings_view():
-        return None
+        old_pass = ft.TextField(label="Старый пароль", width=300)
+        new_pass = ft.TextField(label="Новый пароль", password=True, width=300)
+        exit_button = ft.ElevatedButton(
+            content=ft.Text("Выйти из профиля", size=20, color=ft.colors.RED),
+            bgcolor=ft.colors.DEEP_ORANGE_100,
+            color=ft.colors.WHITE,
+            style=ft.ButtonStyle(
+                shape=ft.RoundedRectangleBorder(radius=5),
+                padding=ft.Padding(10, 10, 10, 10),
+            ),
+        )
+        b = ft.TextButton(content=ft.Row(
+            [
+                ft.Icon(name=ft.icons.ARROW_BACK_ROUNDED, color=ft.colors.SECONDARY),
+                ft.Text("На главную", size=20, color=ft.colors.SECONDARY),
+            ],
+            vertical_alignment=ft.CrossAxisAlignment.START,
+        ),
+            width=200,
+            on_click=lambda _: switch_to_mainpage(),
+        )
+        save_button = ft.ElevatedButton(
+            content=ft.Text("Сохранить", size=20, color=ft.colors.WHITE),
+            bgcolor=ft.colors.BLUE,
+            color=ft.colors.WHITE,
+            style=ft.ButtonStyle(
+                shape=ft.RoundedRectangleBorder(radius=5),
+                padding=ft.Padding(10, 10, 10, 10),
+            ),
+        )
+        return ft.Container(
+            content=ft.Column(
+                [
+                    b,
+                    ft.Text("Изменить пароль", size=24, weight=ft.FontWeight.BOLD),
+                    old_pass,
+                    new_pass,
+                    save_button,
+                    ft.Text(" "),
+                    exit_button,
+                ],
+                alignment=ft.MainAxisAlignment.START,
+                horizontal_alignment=ft.CrossAxisAlignment.START,
+                spacing=20
+            ),
+            alignment=ft.alignment.top_left,
+            expand=True,
+        )
+
+    def change_password_error(type):
+        if type == 1:
+            error_text = ft.Text("Пароль должен содержать не менее 8 символов.",
+                             size=18, weight=ft.FontWeight.NORMAL, color="red", text_align=ft.TextAlign.CENTER)
+        elif type == 2:
+            error_text = ft.Text("Введённые значения не должны совпадать.",
+                                 size=18, weight=ft.FontWeight.NORMAL, color="red", text_align=ft.TextAlign.CENTER)
+        else:
+            error_text = ft.Text("Неверный пароль.",
+                                 size=18, weight=ft.FontWeight.NORMAL, color="red", text_align=ft.TextAlign.CENTER)
+        old_pass = ft.TextField(label="Старый пароль", width=300, border_color="red")
+        new_pass = ft.TextField(label="Новый пароль", password=True, width=300, border_color="red")
+        exit_button = ft.ElevatedButton(
+            content=ft.Text("Выйти из профиля", size=20, color=ft.colors.RED),
+            bgcolor=ft.colors.DEEP_ORANGE_100,
+            color=ft.colors.WHITE,
+            style=ft.ButtonStyle(
+                shape=ft.RoundedRectangleBorder(radius=5),
+                padding=ft.Padding(10, 10, 10, 10),
+            ),
+        )
+        b = ft.TextButton(content=ft.Row(
+            [
+                ft.Icon(name=ft.icons.ARROW_BACK_ROUNDED, color=ft.colors.SECONDARY),
+                ft.Text("На главную", size=20, color=ft.colors.SECONDARY),
+            ],
+            vertical_alignment=ft.CrossAxisAlignment.START,
+        ),
+            width=200,
+            on_click=lambda _: switch_to_mainpage(),
+        )
+        save_button = ft.ElevatedButton(
+            content=ft.Text("Сохранить", size=20, color=ft.colors.WHITE),
+            bgcolor=ft.colors.BLUE,
+            color=ft.colors.WHITE,
+            style=ft.ButtonStyle(
+                shape=ft.RoundedRectangleBorder(radius=5),
+                padding=ft.Padding(10, 10, 10, 10),
+            ),
+        )
+        return ft.Container(
+            content=ft.Column(
+                [
+                    b,
+                    ft.Text("Изменить пароль", size=24, weight=ft.FontWeight.BOLD),
+                    error_text,
+                    old_pass,
+                    new_pass,
+                    save_button,
+                    ft.Text(" "),
+                    exit_button,
+                ],
+                alignment=ft.MainAxisAlignment.START,
+                horizontal_alignment=ft.CrossAxisAlignment.START,
+                spacing=20
+            ),
+            alignment=ft.alignment.top_left,
+            expand=True,
+        )
+
+    def feed_view():
+        topics = [
+            {"name": "Котики признаны жидкостью!", "media": "rbk.ru", "date": "17.02.2024"},
+            {"name": "Инвестиции в симелеоны приводят к банкротству.", "media": "Mash", "date": "22.02.2024"}
+        ]
+        b = ft.TextButton(content=ft.Row(
+            [
+                ft.Icon(name=ft.icons.ARROW_BACK_ROUNDED, color=ft.colors.SECONDARY),
+                ft.Text("На главную", size=20, color=ft.colors.SECONDARY),
+            ],
+            vertical_alignment=ft.CrossAxisAlignment.START,
+        ),
+            width=200,
+            on_click=lambda _: switch_to_mainpage(),
+        )
+        topics_list = ft.Column(horizontal_alignment=ft.CrossAxisAlignment.START, alignment=ft.MainAxisAlignment.START)
+        for topic in topics:
+            topic_row = ft.Row(
+                controls=[
+                    ft.Text(topic["name"], size=18),
+                    ft.Row(controls=[ft.Text(topic["media"], size=18, color=ft.colors.TERTIARY,  weight=ft.FontWeight.BOLD),ft.Text(topic["date"], size=18, color=ft.colors.SECONDARY),
+                                     ft.ElevatedButton(content=ft.Text("Смотреть", size=18, color=ft.colors.WHITE),
+                                      bgcolor=ft.colors.BLUE_ACCENT_700, on_click=None, )], alignment=ft.MainAxisAlignment.END, ),
+                ],
+                alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                vertical_alignment=ft.alignment.top_center,
+            )
+            topics_list.controls.append(topic_row)
+        return ft.Container(
+            content=ft.Column(
+                [
+                    b,
+                    ft.Text("Лента новостей", size=26, weight=ft.FontWeight.BOLD),
+                    topics_list,
+                ],
+                alignment=ft.MainAxisAlignment.START,
+                horizontal_alignment=ft.CrossAxisAlignment.START,
+                spacing=20
+            ),
+            alignment=ft.alignment.top_left,
+            expand=True,
+        )
 
     def switch_to_register():
         page.controls.clear()
@@ -301,8 +450,16 @@ def main(page: ft.Page):
         page.controls.clear()
         page.add(settings_view())
         page.update()
-        
-        
+
+    def switch_to_change_error_pass(type):
+        page.controls.clear()
+        page.add(change_password_error(type))
+        page.update()
+
+    def switch_to_feed():
+        page.controls.clear()
+        page.add(feed_view())
+        page.update()
     switch_to_mainpage()
 
 
