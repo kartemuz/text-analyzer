@@ -41,5 +41,5 @@ flet run --web src/main.py
 **Windows**:
 
 ```commandline
-flet run --web src/main.py
+flet run --web src\main.py
 ```
