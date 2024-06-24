@@ -1,7 +1,7 @@
 from src.domain.stores import NewsSourceStore
 from src.domain.models import NewsSource
 from typing import Optional, List
-from src.application.customizer.default_data import data
+from src.application.customizer.default_data import default_data
 
 
 class NewsSourceService:
@@ -32,5 +32,5 @@ class NewsSourceService:
         return result
 
     async def create_default(self) -> None:
-        for s in data.news_sources:
+        for s in default_data.news_sources:
             await self.add(name=s.name, rss_url=s.rss_url)

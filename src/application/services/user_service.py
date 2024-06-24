@@ -1,7 +1,7 @@
 from src.domain.stores import UserStore
 from src.domain.models import User
 from typing import Optional, List
-from src.application.customizer.default_data import data
+from src.application.customizer.default_data import default_data
 
 
 class UserService:
@@ -32,5 +32,5 @@ class UserService:
         return result
 
     async def create_default(self) -> None:
-        for u in data.users:
+        for u in default_data.users:
             await self.add(login=u.login, password=u.password, tags=u.tags)
