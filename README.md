@@ -35,11 +35,11 @@ pip install -r requirements.txt
 **Linux**:
 
 ```commandline
-python src/main.py
+flet run --web src/main.py
 ```
 
 **Windows**:
 
 ```commandline
-python src\main.py
+flet run --web src/main.py
 ```
