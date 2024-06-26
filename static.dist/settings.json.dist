@@ -1,0 +1,31 @@
+{
+  "news_sources": [
+    {
+      "name": "Московский Комсомолец",
+      "rss_url": "https://www.mk.ru/rss/incident/index.xml"
+    },
+    {
+      "name": "РБК",
+      "rss_url": "https://rssexport.rbc.ru/rbcnews/news/0/full.rss"
+    }
+  ],
+  "users": [
+    {
+      "login": "ivan",
+      "password": "qwerty",
+      "tags": [
+        "Президент",
+        "Россией",
+        "Полиция"
+      ]
+    },
+    {
+      "login": "alex",
+      "password": "123",
+      "tags": [
+        "Санкт-Петербург",
+        "Москва"
+      ]
+    }
+  ]
+}
