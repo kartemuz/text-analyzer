@@ -17,6 +17,7 @@ cloudpathlib==0.18.1
 confection==0.1.5
 cookiecutter==2.6.0
 cymem==2.0.8
+DAWG-Python==0.7.2
 dnspython==2.6.1
 email_validator==2.1.1
 exceptiongroup==1.2.1
@@ -48,16 +49,20 @@ numpy==1.26.4
 oauthlib==3.2.2
 orjson==3.10.4
 packaging==23.2
+pandas==2.2.2
 preshed==3.0.9
 pydantic==2.7.4
 pydantic-settings==2.3.2
 pydantic_core==2.18.4
 Pygments==2.18.0
+pymorphy3==2.0.1
+pymorphy3-dicts-ru==2.4.417150.4580142
 pypng==0.20220715.0
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
 python-multipart==0.0.9
 python-slugify==8.0.4
+pytz==2024.1
 PyYAML==6.0.1
 qrcode==7.4.2
 regex==2024.5.15
@@ -65,6 +70,7 @@ repath==0.9.0
 requests==2.32.3
 rich==13.7.1
 rss-parser==2.0.0
+ru-core-news-sm @ https://github.com/explosion/spacy-models/releases/download/ru_core_news_sm-3.7.0/ru_core_news_sm-3.7.0-py3-none-any.whl#sha256=4b1c291c9b8991b708dadbf1b59f0fdaf7e70ca25e94df7fd3d523c4d5049754
 shellingham==1.5.4
 six==1.16.0
 smart-open==7.0.4
@@ -81,6 +87,7 @@ tqdm==4.66.4
 typer==0.12.3
 types-python-dateutil==2.9.0.20240316
 typing_extensions==4.12.2
+tzdata==2024.1
 ujson==5.10.0
 urllib3==2.2.1
 uvicorn==0.30.1

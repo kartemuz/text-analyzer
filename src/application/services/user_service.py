@@ -10,16 +10,14 @@ class UserService:
     def __init__(self, store: UserStore):
         self.store: UserStore = store()
 
-    async def add(self, login: str, password: str, tags: list) -> None:
-        user = User(login=login, password=password, tags=tags)
+    async def add(self, user: User) -> None:
         await self.store.add(user)
 
     async def get(self, login: str, password: str) -> Optional[User]:
         result = await self.store.get(login=login, password=password)
         return result
 
-    async def edit(self, login: str, password: str, tags: list) -> bool:
-        user = User(login=login, password=password, tags=tags)
+    async def edit(self, user: User) -> bool:
         result = await self.store.edit(user)
         return result
 
@@ -33,4 +31,5 @@ class UserService:
 
     async def create_default(self) -> None:
         for u in default_data.users:
-            await self.add(login=u.login, password=u.password, tags=u.tags)
+            user = User(login=u.login, password=u.password, tags=u.tags)
+            await self.add(user)

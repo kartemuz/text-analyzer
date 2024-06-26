@@ -30,6 +30,12 @@ venv\Scripts\activate.bat
 pip install -r requirements.txt
 ```
 
+### Установка русскоязычной модели `spacy`
+
+```commandline
+python -m spacy download ru_core_news_sm
+```
+
 ## Запуск приложения
 
 **Linux**:

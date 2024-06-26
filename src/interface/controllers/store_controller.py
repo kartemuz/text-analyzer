@@ -5,6 +5,6 @@ from src.persistence.repositories import StoreRepository
 
 class StoreController:
     @staticmethod
-    async def create_store():
+    async def create_store() -> None:
         store_service = StoreService(store=StoreRepository)
         await store_service.create_store()
