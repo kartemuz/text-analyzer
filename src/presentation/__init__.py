@@ -1,4 +1,3 @@
-# модуль графического интерфейса
 import flet as ft
 from flet_core import margin
 
@@ -209,6 +208,7 @@ def main(page: ft.Page):
             height=50,
             content=ft.Text("Новая тема", size=24, color=ft.colors.BLUE_ACCENT_700),
             bgcolor=ft.colors.SECONDARY_CONTAINER,
+            on_click=lambda _: switch_to_search(),
             style=ft.ButtonStyle(
                 shape=ft.RoundedRectangleBorder(radius=10),
             ),
@@ -388,8 +388,8 @@ def main(page: ft.Page):
                 controls=[
                     ft.Text(topic["name"], size=18),
                     ft.Row(controls=[ft.Text(topic["media"], size=18, color=ft.colors.TERTIARY,  weight=ft.FontWeight.BOLD),ft.Text(topic["date"], size=18, color=ft.colors.SECONDARY),
-                                     ft.ElevatedButton(content=ft.Text("Смотреть", size=18, color=ft.colors.WHITE),
-                                      bgcolor=ft.colors.BLUE_ACCENT_700, on_click=None, )], alignment=ft.MainAxisAlignment.END, ),
+                                     ft.ElevatedButton(content=ft.Text("Смотреть", size=18, color=ft.colors.BLUE_ACCENT_700),
+                                                    bgcolor=ft.colors.WHITE, on_click=None, )], alignment=ft.MainAxisAlignment.END, ),
                 ],
                 alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                 vertical_alignment=ft.alignment.top_center,
@@ -410,6 +410,135 @@ def main(page: ft.Page):
             expand=True,
         )
 
+    def search_view():
+        search_field = ft.TextField(label="Введите текст", text_size=20, width=1100, height=45, border_color="blue")
+        b = ft.TextButton(content=ft.Row(
+            [
+                ft.Icon(name=ft.icons.ARROW_BACK_ROUNDED, color=ft.colors.SECONDARY),
+                ft.Text("На главную", size=20, color=ft.colors.SECONDARY),
+            ],
+            vertical_alignment=ft.CrossAxisAlignment.START,
+        ),
+            width=200,
+            on_click=lambda _: switch_to_mainpage(),
+        )
+        search_button = ft.ElevatedButton(
+            content=ft.Text("Найти", size=22, color=ft.colors.WHITE),
+            bgcolor=ft.colors.BLUE,
+            color=ft.colors.WHITE,
+            style=ft.ButtonStyle(
+                shape=ft.RoundedRectangleBorder(radius=5),
+                padding=ft.Padding(35, 15, 35, 15),
+            ),
+        )
+        return ft.Container(
+            content=ft.Column(
+                [
+                    b,
+                    ft.Text("Новая тема", size=26, weight=ft.FontWeight.BOLD),
+                    ft.Row(controls=[search_field, search_button], alignment=ft.MainAxisAlignment.SPACE_BETWEEN, )
+                ],
+                alignment=ft.MainAxisAlignment.START,
+                horizontal_alignment=ft.CrossAxisAlignment.START,
+                spacing=20
+            ),
+            alignment=ft.alignment.top_left,
+            expand=True,
+        )
+
+    def search_show_view():
+        topics = [
+            {"name": "Котики признаны жидкостью!", "media": "rbk.ru", "date": "17.02.2024"},
+            {"name": "Инвестиции в симелеоны приводят к банкротству.", "media": "Mash", "date": "22.02.2024"}
+        ]
+        topics_list = ft.Column(horizontal_alignment=ft.CrossAxisAlignment.START, alignment=ft.MainAxisAlignment.START)
+        for topic in topics:
+            topic_row = ft.Row(
+                controls=[
+                    ft.Text(topic["name"], size=18),
+                    ft.Row(
+                        controls=[ft.Text(topic["media"], size=18, color=ft.colors.TERTIARY, weight=ft.FontWeight.BOLD),
+                                  ft.Text(topic["date"], size=18, color=ft.colors.SECONDARY),
+                                  ft.ElevatedButton(content=ft.Text("Смотреть", size=18, color=ft.colors.BLUE_ACCENT_700),
+                                                    bgcolor=ft.colors.WHITE, on_click=None, )],
+                        alignment=ft.MainAxisAlignment.END, ),
+                ],
+                alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                vertical_alignment=ft.alignment.top_center,
+            )
+            topics_list.controls.append(topic_row)
+        search_field = ft.TextField(label="Введите текст", text_size=20, width=1100, height=45, border_color="blue")
+        b = ft.TextButton(content=ft.Row(
+            [
+                ft.Icon(name=ft.icons.ARROW_BACK_ROUNDED, color=ft.colors.SECONDARY),
+                ft.Text("На главную", size=20, color=ft.colors.SECONDARY),
+            ],
+            vertical_alignment=ft.CrossAxisAlignment.START,
+        ),
+            width=200,
+            on_click=lambda _: switch_to_mainpage(),
+        )
+        search_button = ft.ElevatedButton(
+            content=ft.Text("Найти", size=22, color=ft.colors.WHITE),
+            bgcolor=ft.colors.BLUE,
+            color=ft.colors.WHITE,
+            style=ft.ButtonStyle(
+                shape=ft.RoundedRectangleBorder(radius=5),
+                padding=ft.Padding(35, 15, 35, 15),
+            ),
+        )
+        return ft.Container(
+            content=ft.Column(
+                [
+                    b,
+                    ft.Text("Новая тема", size=26, weight=ft.FontWeight.BOLD),
+                    ft.Row(controls=[search_field, search_button], alignment=ft.MainAxisAlignment.SPACE_BETWEEN, ),
+                    topics_list
+                ],
+                alignment=ft.MainAxisAlignment.START,
+                horizontal_alignment=ft.CrossAxisAlignment.START,
+                spacing=20
+            ),
+            alignment=ft.alignment.top_left,
+            expand=True,
+        )
+
+    def search_show_error():
+        search_field = ft.TextField(label="Введите текст", text_size=20, width=1100, height=45, border_color="blue")
+        b = ft.TextButton(content=ft.Row(
+            [
+                ft.Icon(name=ft.icons.ARROW_BACK_ROUNDED, color=ft.colors.SECONDARY),
+                ft.Text("На главную", size=20, color=ft.colors.SECONDARY),
+            ],
+            vertical_alignment=ft.CrossAxisAlignment.START,
+        ),
+            width=200,
+            on_click=lambda _: switch_to_mainpage(),
+        )
+        search_button = ft.ElevatedButton(
+            content=ft.Text("Найти", size=22, color=ft.colors.WHITE),
+            bgcolor=ft.colors.BLUE,
+            color=ft.colors.WHITE,
+            style=ft.ButtonStyle(
+                shape=ft.RoundedRectangleBorder(radius=5),
+                padding=ft.Padding(35, 15, 35, 15),
+            ),
+        )
+        return ft.Container(
+            content=ft.Column(
+                [
+                    b,
+                    ft.Text("Новая тема", size=26, weight=ft.FontWeight.BOLD),
+                    ft.Row(controls=[search_field, search_button], alignment=ft.MainAxisAlignment.SPACE_BETWEEN, ),
+                    ft.Text("По запросу ничего не найдено.", size=20, weight=ft.FontWeight.NORMAL, color=ft.colors.SECONDARY),
+                ],
+                alignment=ft.MainAxisAlignment.START,
+                horizontal_alignment=ft.CrossAxisAlignment.START,
+                spacing=20
+            ),
+            alignment=ft.alignment.top_left,
+            expand=True,
+        )
     def switch_to_register():
         page.controls.clear()
         page.add(register_view())
@@ -460,8 +589,22 @@ def main(page: ft.Page):
         page.controls.clear()
         page.add(feed_view())
         page.update()
-    switch_to_mainpage()
 
+    def switch_to_search():
+        page.controls.clear()
+        page.add(search_view())
+        page.update()
 
+    def switch_to_search_show():
+        page.controls.clear()
+        page.add(search_show_view())
+        page.update()
+
+    def switch_to_search_error():
+        page.controls.clear()
+        page.add(search_show_error())
+        page.update()
+
+    switch_to_search_error()
 username = "aboba"
 ft.app(target=main)
