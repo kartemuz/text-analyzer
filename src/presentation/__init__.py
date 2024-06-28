@@ -1,15 +1,28 @@
 import flet as ft
 from flet_core import margin
+from src.domain.models import User
+from src.interface.controllers.user_controller import UserController as uc
 
-
+login_input = ""
+password_input = ""
+confirm_password_input = ""
+old_pass = ""
+new_pass = ""
 
 
 def main(page: ft.Page):
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
 
+    def login_click(e):
+        if login_input in uc.get_all_logins and password_input == "":
+            switch_to_mainpage()
+        else:
+            switch_to_login_error()
+
     # Define the Login View
     def login_view():
+        global login_input, password_input
         login_input = ft.TextField(label="Логин", width=300)
         password_input = ft.TextField(label="Пароль", password=True, width=300)
         register_link = ft.TextButton("Зарегистрироваться", on_click=lambda _: switch_to_register())
@@ -17,6 +30,7 @@ def main(page: ft.Page):
             content=ft.Text("Войти", size=20, color=ft.colors.WHITE),
             bgcolor=ft.colors.BLUE,
             color=ft.colors.WHITE,
+            on_click=lambda _: login_click,
             style=ft.ButtonStyle(
                 shape=ft.RoundedRectangleBorder(radius=5),
                 padding=ft.Padding(10, 10, 10, 10),
@@ -41,6 +55,7 @@ def main(page: ft.Page):
         )
 
     def login_view_error():
+        global login_input, password_input
         login_input = ft.TextField(label="Логин", width=300, border_color="red")
         password_input = ft.TextField(label="Пароль", password=True, width=300, border_color="red")
         error_text = ft.Text("Неверный логин или пароль", size=18, weight=ft.FontWeight.NORMAL, color="red")
@@ -49,6 +64,7 @@ def main(page: ft.Page):
             content=ft.Text("Войти", size=20, color=ft.colors.WHITE),
             bgcolor=ft.colors.BLUE,
             color=ft.colors.WHITE,
+            on_click=lambda _: login_click,
             style=ft.ButtonStyle(
                 shape=ft.RoundedRectangleBorder(radius=5),
                 padding=ft.Padding(10, 10, 10, 10),
@@ -73,14 +89,36 @@ def main(page: ft.Page):
             expand=True,
         )
 
+    def register_click(e):
+        global confirm_password_input
+        s = "abcdefghijklmnopqrstuvwxyz0123456789"
+        for el in login_input:
+            if el not in s:
+                switch_to_register_error_login()
+                return 0
+        for el in password_input:
+            if el not in s:
+                switch_to_register_error_pass(2)
+                return 0
+        if len(password_input) < 8:
+            switch_to_register_error_pass(1)
+            return 0
+        elif password_input != confirm_password_input:
+            switch_to_register_error_pass(1)
+            return 0
+        confirm_password_input = ""
+        switch_to_mainpage()
+
     # Define the Register View
     def register_view():
+        global login_input, password_input, confirm_password_input
         username_input = ft.TextField(label="Логин", width=300)
         password_input = ft.TextField(label="Пароль", password=True, width=300)
         confirm_password_input = ft.TextField(label="Повторите пароль", password=True, width=300)
         register_button = ft.ElevatedButton(
             content=ft.Text("Зарегистрироваться", size=16, color=ft.colors.WHITE),
             bgcolor=ft.colors.BLUE,
+            on_click=lambda _: register_click,
             style=ft.ButtonStyle(
                 padding=ft.Padding(10, 10, 10, 10),
                 shape=ft.RoundedRectangleBorder(radius=5),
@@ -105,6 +143,7 @@ def main(page: ft.Page):
         )
 
     def register_view_error_login():
+        global login_input, password_input, confirm_password_input
         error_text = ft.Text("Логин может содержать только строчные\nбуквы латинского алфавита и цифры.",
                              size=18, weight=ft.FontWeight.NORMAL, color="red", text_align=ft.alignment.center)
         username_input = ft.TextField(label="Логин", width=300, border_color="red")
@@ -138,6 +177,7 @@ def main(page: ft.Page):
         )
 
     def register_view_error_pass(type):
+        global login_input, password_input, confirm_password_input
         if type == 1:
             error_text = ft.Text("Пароль должен содержать не менее 8 символов.",
                              size=18, weight=ft.FontWeight.NORMAL, color="red", text_align=ft.TextAlign.CENTER)
@@ -153,12 +193,12 @@ def main(page: ft.Page):
         register_button = ft.ElevatedButton(
             content=ft.Text("Зарегистрироваться", size=16, color=ft.colors.WHITE),
             bgcolor=ft.colors.BLUE,
+            on_click=lambda _: register_click,
             style=ft.ButtonStyle(
                 padding=ft.Padding(10, 10, 10, 10),
                 shape=ft.RoundedRectangleBorder(radius=5),
             ),
         )
-
         return ft.Container(
             content=ft.Column(
                 [
@@ -213,20 +253,19 @@ def main(page: ft.Page):
                 shape=ft.RoundedRectangleBorder(radius=10),
             ),
         )
-        page.add(a)
-        page.update()
-        return ft.Container(
-            content=ft.Row(
+        return ft.Container(content=ft.Column([a, ft.Row(
                 [
                     feed_button,
                     newtheme_button,
                 ],
                 alignment=ft.MainAxisAlignment.CENTER,
                 spacing=20,
-            ),
+            )],
             alignment=ft.alignment.center,
             expand=True,
-        )
+        ), )
+    def delete_click(tag):
+        User.delete_tag(tag)
 
     def mythemes_view():
         topics = [
@@ -249,7 +288,7 @@ def main(page: ft.Page):
             topic_row = ft.Row(
                 controls=[
                     ft.Text(topic["name"], size=18),
-                    ft.ElevatedButton(content=ft.Text("Удалить", size=18, color=ft.colors.WHITE), bgcolor=ft.colors.BLUE_ACCENT_700, on_click=None, )
+                    ft.ElevatedButton(content=ft.Text("Удалить", size=18, color=ft.colors.WHITE), bgcolor=ft.colors.BLUE_ACCENT_700, on_click=lambda _: delete_click(topic["name"]))
                 ],
                 alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                 vertical_alignment=ft.alignment.top_center,
@@ -257,13 +296,32 @@ def main(page: ft.Page):
             topics_list.controls.append(topic_row)
         return ft.Container(content=ft.Column([b, ft.Text("Мои темы", size=24,  weight=ft.FontWeight.BOLD), topics_list,]), alignment=ft.alignment.top_left, expand=True,)
 
+    def exit_click(e):
+        global login_input, password_input
+        login_input = ""
+        password_input = ""
+        switch_to_login()
+
+    def change_pass_click(e):
+        global old_pass, new_pass
+        if len(new_pass) < 8:
+            switch_to_change_error_pass(1)
+        elif old_pass == new_pass:
+            switch_to_change_error_pass(2)
+        else:
+            old_pass = ""
+            new_pass = ""
+            switch_to_settings()
+
     def settings_view():
+        global old_pass, new_pass
         old_pass = ft.TextField(label="Старый пароль", width=300)
         new_pass = ft.TextField(label="Новый пароль", password=True, width=300)
         exit_button = ft.ElevatedButton(
             content=ft.Text("Выйти из профиля", size=20, color=ft.colors.RED),
             bgcolor=ft.colors.DEEP_ORANGE_100,
             color=ft.colors.WHITE,
+            on_click=lambda _: exit_click,
             style=ft.ButtonStyle(
                 shape=ft.RoundedRectangleBorder(radius=5),
                 padding=ft.Padding(10, 10, 10, 10),
@@ -283,6 +341,7 @@ def main(page: ft.Page):
             content=ft.Text("Сохранить", size=20, color=ft.colors.WHITE),
             bgcolor=ft.colors.BLUE,
             color=ft.colors.WHITE,
+            on_click=lambda _: change_pass_click,
             style=ft.ButtonStyle(
                 shape=ft.RoundedRectangleBorder(radius=5),
                 padding=ft.Padding(10, 10, 10, 10),
@@ -323,6 +382,7 @@ def main(page: ft.Page):
             content=ft.Text("Выйти из профиля", size=20, color=ft.colors.RED),
             bgcolor=ft.colors.DEEP_ORANGE_100,
             color=ft.colors.WHITE,
+            on_click=lambda _: exit_click,
             style=ft.ButtonStyle(
                 shape=ft.RoundedRectangleBorder(radius=5),
                 padding=ft.Padding(10, 10, 10, 10),
@@ -342,6 +402,7 @@ def main(page: ft.Page):
             content=ft.Text("Сохранить", size=20, color=ft.colors.WHITE),
             bgcolor=ft.colors.BLUE,
             color=ft.colors.WHITE,
+            on_click=lambda _: change_pass_click,
             style=ft.ButtonStyle(
                 shape=ft.RoundedRectangleBorder(radius=5),
                 padding=ft.Padding(10, 10, 10, 10),
@@ -367,6 +428,8 @@ def main(page: ft.Page):
             expand=True,
         )
 
+    def view_click(e):
+        return 0
     def feed_view():
         topics = [
             {"name": "Котики признаны жидкостью!", "media": "rbk.ru", "date": "17.02.2024"},
@@ -388,8 +451,8 @@ def main(page: ft.Page):
                 controls=[
                     ft.Text(topic["name"], size=18),
                     ft.Row(controls=[ft.Text(topic["media"], size=18, color=ft.colors.TERTIARY,  weight=ft.FontWeight.BOLD),ft.Text(topic["date"], size=18, color=ft.colors.SECONDARY),
-                                     ft.ElevatedButton(content=ft.Text("Смотреть", size=18, color=ft.colors.BLUE_ACCENT_700),
-                                                    bgcolor=ft.colors.WHITE, on_click=None, )], alignment=ft.MainAxisAlignment.END, ),
+                                     ft.ElevatedButton(content=ft.Text("Смотреть", size=18, color=ft.colors.BLUE_ACCENT_700), on_click=lambda _:view_click,
+                                                    bgcolor=ft.colors.WHITE,)], alignment=ft.MainAxisAlignment.END, ),
                 ],
                 alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                 vertical_alignment=ft.alignment.top_center,
@@ -410,6 +473,9 @@ def main(page: ft.Page):
             expand=True,
         )
 
+    def search_click(e):
+        return 0
+
     def search_view():
         search_field = ft.TextField(label="Введите текст", text_size=20, width=1100, height=45, border_color="blue")
         b = ft.TextButton(content=ft.Row(
@@ -426,6 +492,7 @@ def main(page: ft.Page):
             content=ft.Text("Найти", size=22, color=ft.colors.WHITE),
             bgcolor=ft.colors.BLUE,
             color=ft.colors.WHITE,
+            on_click=lambda _: search_click,
             style=ft.ButtonStyle(
                 shape=ft.RoundedRectangleBorder(radius=5),
                 padding=ft.Padding(35, 15, 35, 15),
@@ -482,6 +549,7 @@ def main(page: ft.Page):
             content=ft.Text("Найти", size=22, color=ft.colors.WHITE),
             bgcolor=ft.colors.BLUE,
             color=ft.colors.WHITE,
+            on_click=lambda _: search_click,
             style=ft.ButtonStyle(
                 shape=ft.RoundedRectangleBorder(radius=5),
                 padding=ft.Padding(35, 15, 35, 15),
@@ -519,6 +587,7 @@ def main(page: ft.Page):
             content=ft.Text("Найти", size=22, color=ft.colors.WHITE),
             bgcolor=ft.colors.BLUE,
             color=ft.colors.WHITE,
+            on_click=lambda _: search_click,
             style=ft.ButtonStyle(
                 shape=ft.RoundedRectangleBorder(radius=5),
                 padding=ft.Padding(35, 15, 35, 15),
