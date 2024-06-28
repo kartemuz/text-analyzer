@@ -1,4 +1,8 @@
 import flet as ft
+<<<<<<< HEAD
+=======
+from flet_core import margin
+>>>>>>> 537f02425c6a437a3fd59a0740ae66c786aa60ee
 from src.domain.models import User
 from src.interface.controllers.user_controller import UserController as uc
 
@@ -14,8 +18,12 @@ def main(page: ft.Page):
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
 
     def login_click(e):
+<<<<<<< HEAD
         new_user = User(login_input, password_input)
         if uc.add(e, new_user):
+=======
+        if login_input in uc.get_all_logins and password_input == "":
+>>>>>>> 537f02425c6a437a3fd59a0740ae66c786aa60ee
             switch_to_mainpage()
         else:
             switch_to_login_error()
@@ -104,11 +112,17 @@ def main(page: ft.Page):
             switch_to_register_error_pass(1)
             return 0
         elif password_input != confirm_password_input:
+<<<<<<< HEAD
             switch_to_register_error_pass(3)
             return 0
         confirm_password_input = ""
         new_user = User(login_input, password_input)
         uc.add(e, new_user)
+=======
+            switch_to_register_error_pass(1)
+            return 0
+        confirm_password_input = ""
+>>>>>>> 537f02425c6a437a3fd59a0740ae66c786aa60ee
         switch_to_mainpage()
 
     # Define the Register View
@@ -266,7 +280,10 @@ def main(page: ft.Page):
             alignment=ft.alignment.center,
             expand=True,
         ), )
+<<<<<<< HEAD
 
+=======
+>>>>>>> 537f02425c6a437a3fd59a0740ae66c786aa60ee
     def delete_click(tag):
         User.delete_tag(tag)
 

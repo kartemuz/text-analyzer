@@ -1,4 +1,5 @@
-from src.domain.stores import UserStore, exc_store
+from src.domain.stores import UserStore
+from ...domain import exceptions
 from src.domain.models import User
 from ..database.models import UserDB, TagDB, UserTagDB
 from ..database.base import session_factory
@@ -70,8 +71,9 @@ class UserRepository(UserStore):
 
             except exc.IntegrityError:
                 await session.rollback()
-                raise exc_store.LoginNotUniqueException(message='A user with this username has already been registered',
-                                                        extra_info={'login': user.login})
+                raise exceptions.LoginNotUniqueException(
+                    message='A user with this username has already been registered',
+                    extra_info={'login': user.login})
 
             user_db = await self.get_user_db_(login=user.login, password=user.password)
 

@@ -13,6 +13,12 @@ class User:
 
     def add_tag(self, tag: str) -> None:
         self.tags.append(tag)
+        tags = set(self.tags)
+        self.tags = list(tags)
+
+    def add_tags(self, tags: List[str]):
+        for t in tags:
+            self.add_tag(t)
 
     def delete_tag(self, tag: str) -> bool:
         result: bool
