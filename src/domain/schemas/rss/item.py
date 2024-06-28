@@ -34,7 +34,7 @@ class OptionalItemElementsMixin(XMLBaseModel):
     # guid: Optional[Tag[str]] = None
     # "A string that uniquely identifies the item."
     #
-    # pub_date: Optional[Tag[str]] = None
+    pub_date: Optional[Tag[str]] = None
     # "Indicates when the item was published."
     #
     # source: Optional[Tag[str]] = None

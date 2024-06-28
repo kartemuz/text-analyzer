@@ -1,6 +1,7 @@
 from src.application.services import AnalyzerService
 from typing import Dict, List
 from src.domain.models import User
+from src.domain.schemas.responses import AnalyzerResponse
 
 
 class AnalyzerController:
@@ -9,6 +10,6 @@ class AnalyzerController:
     def __init__(self):
         self.analyzer_service = AnalyzerService()
 
-    async def search(self, user: User) -> Dict[str, List[str]]:
+    async def search(self, user: User) -> Dict[str, List[AnalyzerResponse]]:
         result = await self.analyzer_service.search(user)
         return result

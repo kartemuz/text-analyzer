@@ -2,3 +2,4 @@ from .store_controller import StoreController
 from .user_controller import UserController
 from .news_source_controller import NewsSourceController
 from .analyzer_controller import AnalyzerController
+from .user_session_controller import UserSessionController

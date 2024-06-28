@@ -33,3 +33,11 @@ class User:
     def to_str(self) -> str:
         result = f'login: {self.login}\npassword: {self.password}\ntags:{self.tags}'
         return result
+
+    def get_tags(self) -> List[str]:
+        result = self.tags
+        return result
+
+    def __str__(self):
+        result = self.to_str
+        return result

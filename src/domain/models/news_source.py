@@ -25,3 +25,7 @@ class NewsSource(Source):
     def to_str(self) -> str:
         result = f'name: {self.name}\nrss_url: {self.rss_url}\n'
         return result
+
+    def __str__(self):
+        result = self.to_str
+        return result
