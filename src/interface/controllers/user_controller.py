@@ -2,6 +2,7 @@ from src.application.services import UserService
 from src.persistence.repositories import UserRepository
 from src.domain.models import User
 from typing import Optional, List
+from src.domain import exceptions
 
 
 class UserController:
@@ -11,10 +12,19 @@ class UserController:
         self.user_service = UserService(store=UserRepository)
 
     async def add(self, user: User) -> None:
-        await self.user_service.add(user)
+        try:
+            await self.user_service.add(user)
+        except exceptions.LoginNotUniqueException as ex:
+            raise ex
 
     async def get(self, login: str, password: str) -> Optional[User]:
         result = await self.user_service.get(login=login, password=password)
+        if result is None:
+            all_logins = await self.get_all_logins()
+            if login in all_logins:
+                raise exceptions.InvalidPasswordException
+            else:
+                raise exceptions.InvalidLoginException
         return result
 
     async def edit(self, user: User) -> bool:

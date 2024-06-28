@@ -1,6 +1,7 @@
 from typing import List, Optional
 
-from src.domain.stores import NewsSourceStore, exc_store
+from src.domain.stores import NewsSourceStore
+from ...domain import exceptions
 from src.domain.models import NewsSource
 from sqlalchemy import select, exc
 from ..database.models import NewsSourceDB
@@ -44,9 +45,9 @@ class NewsSourceRepository(NewsSourceStore):
                 await session.commit()
             except exc.IntegrityError:
                 await session.rollback()
-                raise exc_store.NewsSourceNotUnique(message='A similar news source already exists',
-                                                    extra_info={'name': news_source.name,
-                                                                'rss_url': news_source.rss_url})
+                raise exceptions.NewsSourceNotUniqueException(message='A similar news source already exists',
+                                                              extra_info={'name': news_source.name,
+                                                                          'rss_url': news_source.rss_url})
 
     async def delete(self, name: Optional[str], news_source: Optional[NewsSource]) -> bool:
         result: bool

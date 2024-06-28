@@ -1,8 +1,6 @@
 import asyncio
 from src.application import services
 from src.persistence.repositories import UserRepository, NewsSourceRepository
-from src.domain.stores import exc_store
-from src.interface.controllers import StoreController
 from src.application.services import AnalyzerService
 
 
