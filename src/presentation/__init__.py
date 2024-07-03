@@ -1,31 +1,27 @@
 import flet as ft
-<<<<<<< HEAD
-=======
-from flet_core import margin
->>>>>>> 537f02425c6a437a3fd59a0740ae66c786aa60ee
 from src.domain.models import User
 from src.interface.controllers.user_controller import UserController as uc
-
+from src.interface.controllers.user_session_controller import UserSessionController
+from src.domain.exceptions import *
 login_input = ""
 password_input = ""
 confirm_password_input = ""
 old_pass = ""
 new_pass = ""
+c_session = UserSessionController(login_input, password_input).create(True)
 
 
 def main(page: ft.Page):
+
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
 
-    def login_click(e):
-<<<<<<< HEAD
-        new_user = User(login_input, password_input)
-        if uc.add(e, new_user):
-=======
-        if login_input in uc.get_all_logins and password_input == "":
->>>>>>> 537f02425c6a437a3fd59a0740ae66c786aa60ee
+    def login_click():
+        global c_session
+        try:
+            c_session = UserSessionController(login_input, password_input).create(False)
             switch_to_mainpage()
-        else:
+        except InvalidLoginException or InvalidPasswordException:
             switch_to_login_error()
 
     # Define the Login View
@@ -44,7 +40,6 @@ def main(page: ft.Page):
                 padding=ft.Padding(10, 10, 10, 10),
             ),
         )
-
         return ft.Container(
             content=ft.Column(
                 [
@@ -98,11 +93,11 @@ def main(page: ft.Page):
         )
 
     def register_click(e):
-        global confirm_password_input
+        global confirm_password_input, c_session
         s = "abcdefghijklmnopqrstuvwxyz0123456789"
         for el in login_input:
             if el not in s:
-                switch_to_register_error_login()
+                switch_to_register_error_login(1)
                 return 0
         for el in password_input:
             if el not in s:
@@ -112,18 +107,14 @@ def main(page: ft.Page):
             switch_to_register_error_pass(1)
             return 0
         elif password_input != confirm_password_input:
-<<<<<<< HEAD
             switch_to_register_error_pass(3)
             return 0
-        confirm_password_input = ""
-        new_user = User(login_input, password_input)
-        uc.add(e, new_user)
-=======
-            switch_to_register_error_pass(1)
-            return 0
-        confirm_password_input = ""
->>>>>>> 537f02425c6a437a3fd59a0740ae66c786aa60ee
-        switch_to_mainpage()
+        try:
+            c_session = UserSessionController(login_input, password_input).create(True)
+            confirm_password_input = ""
+            switch_to_mainpage()
+        except LoginNotUniqueException:
+            switch_to_register_error_login(2)
 
     # Define the Register View
     def register_view():
@@ -158,10 +149,14 @@ def main(page: ft.Page):
             expand=True,
         )
 
-    def register_view_error_login():
+    def register_view_error_login(type):
         global login_input, password_input, confirm_password_input
-        error_text = ft.Text("Логин может содержать только строчные\nбуквы латинского алфавита и цифры.",
+        if type == 1:
+            error_text = ft.Text("Логин может содержать только строчные\nбуквы латинского алфавита и цифры.",
                              size=18, weight=ft.FontWeight.NORMAL, color="red", text_align=ft.alignment.center)
+        else:
+            error_text = ft.Text("Пользователь с таким логином\nуже зарегистрирован.",
+                                 size=18, weight=ft.FontWeight.NORMAL, color="red", text_align=ft.alignment.center)
         username_input = ft.TextField(label="Логин", width=300, border_color="red")
         password_input = ft.TextField(label="Пароль", password=True, width=300)
         confirm_password_input = ft.TextField(label="Повторите пароль", password=True, width=300)
@@ -237,7 +232,7 @@ def main(page: ft.Page):
         settings = ft.TextButton(content=ft.Text("Настройки", size=20, color=ft.colors.BLUE_ACCENT_700), on_click=lambda _: switch_to_settings())
         themes = ft.TextButton(content=ft.Text("Мои темы", size=20, color=ft.colors.BLUE_ACCENT_700), on_click=lambda _: switch_to_mythemes())
 
-        profile = ft.Text("dd", size=22)
+        profile = ft.Text(login_input, size=22)
         a = ft.Row(
             [
                 ft.Icon(name=ft.icons.SUPERVISED_USER_CIRCLE, color=ft.colors.BLUE_ACCENT_700, size=30),
@@ -280,18 +275,13 @@ def main(page: ft.Page):
             alignment=ft.alignment.center,
             expand=True,
         ), )
-<<<<<<< HEAD
 
-=======
->>>>>>> 537f02425c6a437a3fd59a0740ae66c786aa60ee
     def delete_click(tag):
-        User.delete_tag(tag)
+        return 0
 
     def mythemes_view():
-        topics = [
-            {"name": "Котики", "date": "17.02.2024"},
-            {"name": "Инвестиции", "date": "22.02.2024"}
-        ]
+        global c_session
+        topics = c_session.
         b = ft.TextButton(content=ft.Row(
                 [
                     ft.Icon(name=ft.icons.ARROW_BACK_ROUNDED, color=ft.colors.SECONDARY),
@@ -320,10 +310,11 @@ def main(page: ft.Page):
         global login_input, password_input
         login_input = ""
         password_input = ""
+        del c_session
         switch_to_login()
 
     def change_pass_click(e):
-        global old_pass, new_pass
+        global old_pass, new_pass, c_session
         if len(new_pass) < 8:
             switch_to_change_error_pass(1)
         elif old_pass == new_pass:
@@ -331,6 +322,7 @@ def main(page: ft.Page):
         else:
             old_pass = ""
             new_pass = ""
+            c_session = UserSessionController(login_input, new_pass).create(False)
             switch_to_settings()
 
     def settings_view():
@@ -387,6 +379,7 @@ def main(page: ft.Page):
         )
 
     def change_password_error(type):
+        global old_pass, new_pass
         if type == 1:
             error_text = ft.Text("Пароль должен содержать не менее 8 символов.",
                              size=18, weight=ft.FontWeight.NORMAL, color="red", text_align=ft.TextAlign.CENTER)
@@ -450,6 +443,7 @@ def main(page: ft.Page):
 
     def view_click(e):
         return 0
+
     def feed_view():
         topics = [
             {"name": "Котики признаны жидкостью!", "media": "rbk.ru", "date": "17.02.2024"},
@@ -633,9 +627,9 @@ def main(page: ft.Page):
         page.add(register_view())
         page.update()
 
-    def switch_to_register_error_login():
+    def switch_to_register_error_login(type):
         page.controls.clear()
-        page.add(register_view_error_login())
+        page.add(register_view_error_login(type))
         page.update()
 
     def switch_to_register_error_pass(type):
@@ -695,5 +689,6 @@ def main(page: ft.Page):
         page.update()
 
     switch_to_search_error()
-username = "aboba"
+
+
 ft.app(target=main)
