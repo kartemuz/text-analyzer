@@ -64,3 +64,7 @@ class UserSessionController:
     async def search(self) -> Dict[str, List[AnalyzerResponse]]:
         result = await self.analyzer_controller.search(self.user)
         return result
+
+    async def search_by_tag(self, tag: str) -> List[AnalyzerResponse]:
+        result = await self.analyzer_controller.search_by_tag(tag)
+        return result

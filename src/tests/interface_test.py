@@ -28,17 +28,17 @@ async def main():
     #     for link in links_dict[tag]:
     #         print(link)
     #     print()
-    
-    login = 'ivan'
-    password = 'qwerty'
-    session = await UserSessionController(login, password).create()
-    response = await session.search()
-    for tag in response.keys():
-        print(tag)
-        for t in response[tag]:
-            print(t)
-        print()
-    del session
+
+    # login = 'ivan'
+    # password = 'qwerty'
+    # session = await UserSessionController(login, password).create()
+    # response = await session.search()
+    # for tag in response.keys():
+    #     print(tag)
+    #     for t in response[tag]:
+    #         print(t)
+    #     print()
+    # del session
 
 
 if __name__ == '__main__':

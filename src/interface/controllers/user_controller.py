@@ -22,9 +22,9 @@ class UserController:
         if result is None:
             all_logins = await self.get_all_logins()
             if login in all_logins:
-                raise exceptions.InvalidPasswordException
+                raise exceptions.InvalidPasswordException('Некорректный пароль')
             else:
-                raise exceptions.InvalidLoginException
+                raise exceptions.InvalidLoginException('Некорректный логин')
         return result
 
     async def edit(self, user: User) -> bool:

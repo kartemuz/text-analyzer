@@ -13,3 +13,7 @@ class AnalyzerController:
     async def search(self, user: User) -> Dict[str, List[AnalyzerResponse]]:
         result = await self.analyzer_service.search(user)
         return result
+
+    async def search_by_tag(self, tag: str) -> List[AnalyzerResponse]:
+        result = await self.analyzer_service.search_by_tag(tag)
+        return result
