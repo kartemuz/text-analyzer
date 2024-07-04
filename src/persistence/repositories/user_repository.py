@@ -92,7 +92,7 @@ class UserRepository(UserStore):
                 await session.commit()
 
     async def delete(self, login: Optional[str], password: Optional[str],
-                     user: Optional[User]) -> bool:
+                     user: Optional[User] = None) -> bool:
         result: bool
         user_db: UserDB
         if user is None:
