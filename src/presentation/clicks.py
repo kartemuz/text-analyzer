@@ -36,7 +36,7 @@ def register_click(page: ft.Page):
         sw.switch_to_register_error_login(2, page)
 
 
-async def delete_click(tag, page: ft.Page):
+def delete_click(tag, page: ft.Page):
     asyncio.run(page.session.get("user_session").delete_tag(tag))
     sw.switch_to_mythemes(page)
 
@@ -63,6 +63,8 @@ def change_pass_click(page: ft.Page):
         sw.switch_to_change_error_pass(1, page)
     elif page.session.get("old_pass").value == page.session.get("new_pass").value:
         sw.switch_to_change_error_pass(2, page)
+    elif page.session.get("old_pass").value != page.session.get("password_input").value:
+        sw.switch_to_change_error_pass(3, page)
     else:
         asyncio.run(page.session.get("user_session").change_password(page.session.get("new_pass").value))
         sw.switch_to_settings(page)
