@@ -68,9 +68,9 @@ def switch_to_search(page: ft.Page):
     page.update()
 
 
-def switch_to_search_show(page: ft.Page):
+def switch_to_search_show(page: ft.Page, tag):
     page.controls.clear()
-    page.add(vw.search_show_view(page))
+    page.add(vw.search_show_view(page, tag))
     page.update()
 
 
