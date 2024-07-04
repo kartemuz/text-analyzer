@@ -37,7 +37,7 @@ def register_click(page: ft.Page):
 
 
 async def delete_click(tag, page: ft.Page):
-    page.session.get("user_session").delete_tag(tag)
+    asyncio.run(page.session.get("user_session").delete_tag(tag))
     sw.switch_to_mythemes(page)
 
 
