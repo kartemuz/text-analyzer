@@ -35,3 +35,21 @@ class AnalyzerService:
                         result[t].append(analyzer_response)
 
         return result
+
+    async def search_by_tag(self, tag: str) -> List[AnalyzerResponse]:
+        result = list()
+        news_source_service = NewsSourceService(store=NewsSourceRepository)
+        news_sources = await news_source_service.get_all()
+        for ns in news_sources:
+            for i in ns.rss.channel.content.items:
+                i: Item
+                if self.analyzer.search(i.description.content, tag) or self.analyzer.search(i.title.content, tag) or \
+                        (i.category is not None and self.analyzer.search(i.category.content, tag)):
+                    analyzer_response = AnalyzerResponse(
+                        source_name=ns.name,
+                        title=i.title.content,
+                        link=i.link.content,
+                        date=i.pub_date.content
+                    )
+                    result.append(analyzer_response)
+        return result
