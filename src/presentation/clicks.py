@@ -41,13 +41,16 @@ async def delete_click(tag, page: ft.Page):
     sw.switch_to_mythemes(page)
 
 
-def search_click(page: ft.Page, tag):
-    # ///
+def view_click(url):
     return 0
 
 
-def view_click():
-    return 0
+def search_click(tag, page: ft.Page):
+    if len(asyncio.run(page.session.get("user_session").search_by_tag(tag))) == 0:
+        sw.switch_to_search_error(page)
+    else:
+        asyncio.run(page.session.get("user_session").add_tag(tag))
+        sw.switch_to_search_show(page, tag)
 
 
 def exit_click(page: ft.Page):
