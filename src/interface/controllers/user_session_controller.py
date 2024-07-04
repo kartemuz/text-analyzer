@@ -3,6 +3,7 @@ from src.domain.models import User
 from src.domain import exceptions
 from typing import List, Dict
 from src.domain.schemas.responses import AnalyzerResponse
+from datetime import datetime
 
 
 class UserSessionController:
@@ -67,4 +68,16 @@ class UserSessionController:
 
     async def search_by_tag(self, tag: str) -> List[AnalyzerResponse]:
         result = await self.analyzer_controller.search_by_tag(tag)
+        return result
+
+    def get_date_(self, obj):
+        return datetime.strptime(obj.date, "%d.%m.%Y")
+
+    async def search_sorted(self) -> List[AnalyzerResponse]:
+        result = []
+        articles = await self.search()
+        for tag in articles.keys():
+            for art in articles[tag]:
+                result.append(art)
+        result = sorted(result, key=self.get_date_, reverse=True)
         return result

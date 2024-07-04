@@ -29,15 +29,18 @@ async def main():
     #         print(link)
     #     print()
 
-    # login = 'ivan'
-    # password = 'qwerty'
-    # session = await UserSessionController(login, password).create()
+    login = 'ivan'
+    password = 'qwerty'
+    session = await UserSessionController(login, password).create()
     # response = await session.search()
     # for tag in response.keys():
     #     print(tag)
     #     for t in response[tag]:
     #         print(t)
     #     print()
+
+    for i in await session.search_sorted():
+        print(i.date)
     # del session
 
 
